@@ -107,18 +107,8 @@ http://127.0.0.1:8000
 
 ---
 
-## 🗝 **Model Details**
+## 🗝 **Technical Details**
 
-### - **Architecture**
-  - The neural network is implemented using **TensorFlow** and consists of several layers, including:
-    - **Convolutional Layers**: For extracting features from input images.
-    - **Dense Layers**: For classification based on extracted features.
-    - The model is trained on the **MNIST** dataset, which consists of 28x28 grayscale images of handwritten digits (0-9).
-  
-### - **Files**
-  - `neural_network.py`: Contains the implementation and training logic for the neural network.
-  - `digit_detection_model.h5`: The saved model file used for making predictions.
-  - `visualization.py`: Script for generating and visualizing training metrics and model weights.
 
 ---
 
@@ -137,8 +127,8 @@ The project relies on the following dependencies:
 
 - [**Usman Faizyab Khan**](https://github.com/USMAN-FAIZYAB-KHAN)
 - [**Muhammad Owais**](https://github.com/MuhammadOwais03)
-- [**Muhammad Zunain**](https://github.com/yourusername)
-- [**Zuhaib Noor**](https://github.com/yourusername)
+- [**Muhammad Zunain**](https://github.com/Muhammad-Zunain)
+- [**Zuhaib Noor**](https://github.com/zuhaibnoor)
 
 ---
 

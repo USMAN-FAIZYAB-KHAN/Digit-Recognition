@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Error Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <div class="mt-14 sm:ml-64 p-10" style="height: calc(100vh - 58px);">
+            <canvas id="errorChart" class="h-full w-full"></canvas>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    const errorHistory = {{ error_history|safe }};
+    const epochs = Array.from({ length: errorHistory.length }, (_, i) => i + 1);
+
+    const ctx = document.getElementById('errorChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: epochs,
+            datasets: [{
+                label: 'Training Error',
+                data: errorHistory,
+                borderColor: 'rgba(25, 59, 215, 1)',
+                backgroundColor: 'rgba(31, 41, 55, 0.4)',
+                borderWidth: 2,
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    enabled: true
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Epochs'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Average Error'
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

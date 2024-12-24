@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div>
+    <div class="mt-14 sm:ml-64" style="height: calc(100vh - 58px);">
+        <canvas id="neuralCanvas" class="h-full w-full"></canvas>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    const canvas = document.getElementById('neuralCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Neural network structure
+    const neuralLayers = {{ layers }};
+    const neuronColor = '#1A4EE4';
+    const connectionColor = '#1F2937';
+
+    let radius = 15; // Neuron circle radius
+
+    // Function to set canvas size and adjust based on window size
+    function resizeCanvas() {
+        // Get the width of the parent container (responsive width)
+        const containerWidth = canvas.parentElement.clientWidth;
+
+        // Get the height of the <nav> element dynamically
+        const navbar = document.querySelector('nav'); // Select the <nav> element
+        const navbarHeight = navbar ? navbar.offsetHeight : 0; // Get navbar height
+
+        const containerHeight = window.innerHeight - navbarHeight; // Set height according to navbar height
+        canvas.style.marginTop = `${navbarHeight}px`; // Set margin-top to avoid navbar overlap
+
+        // Set the canvas size to fill its parent container
+        canvas.width = containerWidth;
+        canvas.height = containerHeight;
+
+        if (canvas.width > 800) {
+            radius = 15; // Adjust neuron size based on canvas size
+        } else {
+            radius = Math.min(canvas.width, canvas.height) / 40; // Dynamically adjust neuron size
+        }
+
+        // Redraw the neural network
+        drawNeuralNetwork(neuralLayers);
+    }
+
+    // Function to draw a neuron
+    function drawNeuron(x, y, radius, color) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    // Function to connect two neurons
+    function drawConnection(x1, y1, x2, y2, color) {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = color;
+        ctx.stroke();
+    }
+
+    // Function to draw the neural network
+    function drawNeuralNetwork(neuralLayers) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before redrawing
+        let layerDistance = canvas.width / (neuralLayers.length + 1); // Horizontal distance between layers
+        const updatedLayers = [];
+
+        for (let i = 0; i < neuralLayers.length; i++) {
+            if (i==0 && neuralLayers[i] > 18) {
+                updatedLayers.push(18);
+            }
+            else if (neuralLayers[i] > 17 && i != 0) {
+                updatedLayers.push(17);
+            }
+            else {
+                updatedLayers.push(neuralLayers[i]);
+            }
+        }
+
+
+        // Store neuron positions to connect later
+        const neuronPositions = [];
+
+        for (let i = 0; i < neuralLayers.length; i++) {
+            const layer = updatedLayers[i];
+            const layerNeurons = [];
+
+
+
+            // Calculate vertical spacing and center neurons within the layer
+            const yOffset = (canvas.height - (layer * (2 * radius + 5) - 40)) / 2;
+
+            for (let j = 0; j < layer; j++) {
+                const x = (i + 1) * layerDistance; // Horizontal position
+                const y = yOffset + j * (2 * radius + 5); // Vertical position
+
+
+
+                if (neuralLayers[i] !== updatedLayers[i]) {
+                    if (i==0) {
+                        if ( j==7 || j==8 || j==9 || j==10 ) {
+                            drawNeuron(x, y, radius/3, '#000000');
+                            continue;
+                        }
+                    } else {
+                        let middle = Math.floor(layer/2);
+                        if (j == middle || j == middle+1 || j == middle-1) {
+                            drawNeuron(x, y, radius/3, '#000000');
+                            continue;
+                        }
+                    }
+
+                }
+
+                
+
+                layerNeurons.push({ x, y });
+            }
+            neuronPositions.push(layerNeurons);
+        }
+
+        // Draw the connections (weights) first
+        for (let i = 0; i < neuronPositions.length - 1; i++) {
+            const currentLayer = neuronPositions[i];
+            const nextLayer = neuronPositions[i + 1];
+
+            for (let neuron of currentLayer) {
+                for (let nextNeuron of nextLayer) {
+                    drawConnection(neuron.x, neuron.y, nextNeuron.x, nextNeuron.y, connectionColor);
+                }
+            }
+        }
+
+        // Draw the neurons on top of the connections
+        for (let i = 0; i < neuronPositions.length; i++) {
+            const layerNeurons = neuronPositions[i];
+            for (let neuron of layerNeurons) {
+                drawNeuron(neuron.x, neuron.y, radius, neuronColor);
+            }
+        }
+    }
+
+    // Resize canvas initially and on window resize
+    window.addEventListener('resize', resizeCanvas);
+
+    // Initial canvas setup
+    resizeCanvas();
+
+</script>
+{% endblock %}

@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+   @keyframes fadeIn {
+      0% {
+         opacity: 0;
+         transform: translateY(-20px);
+         /* Start from above */
+      }
+
+      100% {
+         opacity: 1;
+         transform: translateY(0);
+         /* End at original position */
+      }
+   }
+
+   .fade-in {
+      animation: fadeIn 1s ease-in-out forwards;
+      /* Animation properties */
+   }
+</style>
+<div class="p-2 sm:ml-64">
+   <div class="p-2 mt-14">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+         <div class="flex flex-col sm:flex-row rounded bg-gray-50 h-64 sm:h-80 dark:bg-gray-800 p-4 gap-4">
+            <div class="w-full h-4/5 sm:w-3/5 sm:h-full">
+               <canvas id="drawingCanvas" class="rounded bg-white w-full h-full"></canvas>
+            </div>
+
+            <div class="flex flex-wrap h-1/5 sm:h-full sm:w-2/5 w-full justify-center">
+               <!-- Toolbar Container -->
+               <div class="flex flex-wrap justify-center gap-1 sm:space-y-2">
+                  <!-- Draw Button -->
+                  <button type="button" id="draw"
+                     class="w-12 sm:w-full flex items-center justify-center text-lg sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600 dark:focus:ring-gray-500">
+                     <i class="fa-solid fa-pencil"></i>
+                     <span class="hidden sm:inline ml-2">Draw</span>
+                  </button>
+
+                  <!-- Erase Button -->
+                  <button type="button" id="erase"
+                     class="w-12 sm:w-full flex items-center justify-center text-lg sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600 dark:focus:ring-gray-500">
+                     <i class="fa-solid fa-eraser"></i>
+                     <span class="hidden sm:inline ml-2">Erase</span>
+                  </button>
+
+                  <!-- Brush Size Button -->
+                  <button type="button" id="brush-size"
+                     class="w-12 sm:w-full flex items-center justify-center text-lg sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600 dark:focus:ring-gray-500">
+                     <i class="fa-solid fa-paintbrush"></i>
+                     <span class="hidden sm:inline ml-2">Size</span>
+                  </button>
+               </div>
+
+
+               <div class="text-center self-end">
+                  <button type="button" id="clear"
+                     class="w-16 sm:w-full focus:outline-none text-white bg-red-700 hover:bg-red-800 font-medium rounded text-sm px-px sm:px-5 py-2.5 sm:mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Clear</button>
+                  <button type="button" id="predict"
+                     class="w-16 sm:w-full text-white bg-blue-700 hover:bg-blue-800 font-medium rounded text-sm px-px sm:px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Predict</button>
+               </div>
+            </div>
+         </div>
+
+         <div class="grid grid-rows-[auto,1fr] h-64 sm:h-80 rounded bg-gray-50 dark:bg-gray-800 p-4">
+            <h2 class="text-center text-2xl font-extrabold text-white bg-blue-700 p-2 rounded">
+               Predicted Digit
+           </h2>
+           
+            <!-- Bottom Row: GIF and Predicted Digit Display -->
+            <div class="flex items-center justify-center space-x-6">
+                <!-- Larger GIF Animation on the Left -->
+                <img src="{% static 'gifs/prediction.gif' %}" class="h-40 w-40 sm:h-64 sm:w-80">
+        
+                <!-- Larger Predicted Digit Display with Slide-in Animation -->
+                <p id="predicted-digit" class="text-8xl font-bold text-gray-700 dark:text-gray-300 opacity-0 transform -translate-x-10 transition duration-1000 delay-500">
+                    <!-- JavaScript will populate the digit here after animation -->
+                    0
+                </p>
+            </div>
+        </div>
+        
+      
+
+
+      </div>
+      <!-- <div class="h-64 sm:h-96 rounded bg-gray-50 dark:bg-gray-800"> -->
+      <div class="max-w-full mx-auto bg-gray-50 dark:bg-gray-800 rounded-lg p-6 shadow-md">
+         <!-- Container for vertical bars -->
+         <div class="flex justify-around items-end h-64 space-x-4">
+            <!-- Example for Digit 0 -->
+            <div class="flex flex-col items-center">
+               <span class="text-sm font-medium text-blue-700 dark:text-white mt-2" id="percent-0">0%</span>
+               <div class="relative w-6 h-48 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2">
+                  <div
+                     class="absolute bottom-0 left-0 bg-blue-600 w-full rounded transition-all duration-700 ease-in-out"
+                     id="progress-0" style="height: 0%"></div> <!-- Set initial small height to show bar -->
+               </div>
+               <span class="text-lg font-semibold text-blue-700 dark:text-white mt-1">0</span>
+            </div>
+
+            <!-- Repeat structure for digits 1-9 -->
+            <div class="flex flex-col items-center">
+               <span class="text-sm font-medium text-blue-700 dark:text-white mt-2" id="percent-1">0%</span>
+               <div class="relative w-6 h-48 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2">
+                  <div
+                     class="absolute bottom-0 left-0 bg-blue-600 w-full rounded transition-all duration-700 ease-in-out"
+                     id="progress-1" style="height: 0%"></div>
+               </div>
+               <span class="text-lg font-semibold text-blue-700 dark:text-white mt-1">1</span>
+            </div>
+
+            <!-- Repeat structure for digits 2-9 -->
+
+            <div class="flex flex-col items-center">
+               <span class="text-sm font-medium text-blue-700 dark:text-white mt-2" id="percent-2">0%</span>
+               <div class="relative w-6 h-48 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2">
+                  <div
+                     class="absolute bottom-0 left-0 bg-blue-600 w-full rounded transition-all duration-700 ease-in-out"
+                     id="progress-2" style="height: 0%"></div>
+               </div>
+               <span class="text-lg font-semibold text-blue-700 dark:text-white mt-1">2</span>
+            </div>
+
+            <div class="flex flex-col items-center">
+               <span class="text-sm font-medium text-blue-700 dark:text-white mt-2" id="percent-3">0%</span>
+               <div class="relative w-6 h-48 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2">
+                  <div
+                     class="absolute bottom-0 left-0 bg-blue-600 w-full rounded transition-all duration-700 ease-in-out"
+                     id="progress-3" style="height: 0%"></div>
+               </div>
+               <span class="text-lg font-semibold text-blue-700 dark:text-white mt-1">3</span>
+            </div>
+
+            <div class="flex flex-col items-center">
+               <span class="text-sm font-medium text-blue-700 dark:text-white mt-2" id="percent-4">0%</span>
+               <div class="relative w-6 h-48 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2">
+                  <div
+                     class="absolute bottom-0 left-0 bg-blue-600 w-full rounded transition-all duration-700 ease-in-out"
+                     id="progress-4" style="height: 0%"></div>
+               </div>
+               <span class="text-lg font-semibold text-blue-700 dark:text-white mt-1">4</span>
+            </div>
+
+            <div class="flex flex-col items-center">
+               <span class="text-sm font-medium text-blue-700 dark:text-white mt-2" id="percent-5">0%</span>
+               <div class="relative w-6 h-48 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2">
+                  <div
+                     class="absolute bottom-0 left-0 bg-blue-600 w-full rounded transition-all duration-700 ease-in-out"
+                     id="progress-5" style="height: 0%"></div>
+               </div>
+               <span class="text-lg font-semibold text-blue-700 dark:text-white mt-1">5</span>
+            </div>
+
+            <div class="flex flex-col items-center">
+               <span class="text-sm font-medium text-blue-700 dark:text-white mt-2" id="percent-6">0%</span>
+               <div class="relative w-6 h-48 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2">
+                  <div
+                     class="absolute bottom-0 left-0 bg-blue-600 w-full rounded transition-all duration-700 ease-in-out"
+                     id="progress-6" style="height: 0%"></div>
+               </div>
+               <span class="text-lg font-semibold text-blue-700 dark:text-white mt-1">6</span>
+            </div>
+
+            <div class="flex flex-col items-center">
+               <span class="text-sm font-medium text-blue-700 dark:text-white mt-2" id="percent-7">0%</span>
+               <div class="relative w-6 h-48 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2">
+                  <div
+                     class="absolute bottom-0 left-0 bg-blue-600 w-full rounded transition-all duration-700 ease-in-out"
+                     id="progress-7" style="height: 0%"></div>
+               </div>
+               <span class="text-lg font-semibold text-blue-700 dark:text-white mt-1">7</span>
+            </div>
+
+            <div class="flex flex-col items-center">
+               <span class="text-sm font-medium text-blue-700 dark:text-white mt-2" id="percent-8">0%</span>
+               <div class="relative w-6 h-48 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2">
+                  <div
+                     class="absolute bottom-0 left-0 bg-blue-600 w-full rounded transition-all duration-700 ease-in-out"
+                     id="progress-8" style="height: 0%"></div>
+               </div>
+               <span class="text-lg font-semibold text-blue-700 dark:text-white mt-1">8</span>
+            </div>
+
+            <div class="flex flex-col items-center">
+               <span class="text-sm font-medium text-blue-700 dark:text-white mt-2" id="percent-9">0%</span>
+               <div class="relative w-6 h-48 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2">
+                  <div
+                     class="absolute bottom-0 left-0 bg-blue-600 w-full rounded transition-all duration-700 ease-in-out"
+                     id="progress-9" style="height: 0%"></div>
+               </div>
+               <span class="text-lg font-semibold text-blue-700 dark:text-white mt-1">9</span>
+            </div>
+
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+   function showPredictedDigit(digit) {
+      const predictedDigit = document.getElementById('predicted-digit');
+      predictedDigit.textContent = digit;
+      predictedDigit.classList.remove('opacity-0', '-translate-x-10');
+      predictedDigit.classList.add('opacity-100', 'translate-x-0');
+      
+   }
+
+   // Function to update the prediction bars
+   function updatePredictionBars(predictions) {
+      console.log(predictions);
+      predictions.forEach((value, index) => {
+         const progressBar = document.getElementById(`progress-${index}`);
+         const percentLabel = document.getElementById(`percent-${index}`);
+         progressBar.style.height = `${value}%`;
+         percentLabel.textContent = `${value}%`;
+      });
+   }
+
+   const canvas = document.getElementById("drawingCanvas");
+   const ctx = canvas.getContext("2d");
+
+   // Function to handle active state toggle
+   function setActiveButton(buttonId) {
+      console.log(buttonId);
+      // Get all buttons
+      const buttons = document.querySelectorAll("#draw, #erase, #brush-size");
+
+      // Loop through all buttons and remove the 'active' class
+      buttons.forEach(button => button.classList.remove("active"));
+
+      // Add the 'active' class to the clicked button
+      document.getElementById(buttonId).classList.add("active");
+   }
+
+   // Variables to track drawing state
+   let isDrawing = false;
+   let brushSize = 16;  // Default brush size
+   let isErasing = false;
+
+   // Set up canvas dimensions
+   function resizeCanvas() {
+      // Resize canvas to fill its container
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+   }
+   resizeCanvas();
+
+   // Helper function to get mouse/touch position relative to the canvas
+   function getPosition(event) {
+      const rect = canvas.getBoundingClientRect();
+      const x = (event.clientX || event.touches[0].clientX) - rect.left;
+      const y = (event.clientY || event.touches[0].clientY) - rect.top;
+      return { x, y };
+   }
+
+   // Start drawing
+   function startDrawing(event) {
+      isDrawing = true;
+      const pos = getPosition(event);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+   }
+
+   function draw(event) {
+      if (isDrawing) {
+         const pos = getPosition(event);
+         ctx.lineTo(pos.x, pos.y);
+         ctx.strokeStyle = isErasing ? "#000" : "#fff";  // Erase or Draw
+         ctx.lineWidth = brushSize;
+         ctx.lineCap = "round";
+         ctx.stroke();
+      }
+   }
+
+   function stopDrawing() {
+      isDrawing = false;
+      ctx.closePath();
+   }
+
+   // Event listeners for mouse and touch events
+   canvas.addEventListener("mousedown", startDrawing);
+   canvas.addEventListener("mousemove", draw);
+   canvas.addEventListener("mouseup", stopDrawing);
+   canvas.addEventListener("mouseout", stopDrawing);
+
+   // Touch events
+   canvas.addEventListener("touchstart", (e) => {
+      e.preventDefault(); // Prevent scrolling
+      startDrawing(e);
+   });
+   canvas.addEventListener("touchmove", (e) => {
+      e.preventDefault(); // Prevent scrolling
+      draw(e);
+   });
+   canvas.addEventListener("touchend", stopDrawing);
+
+   // Toolbar actions
+   document.getElementById("draw").addEventListener("click", () => {
+      setActiveButton("draw");
+      isErasing = false;
+      canvas.style.cursor = "crosshair"; // Change cursor for drawing
+   });
+
+   document.getElementById("erase").addEventListener("click", () => {
+      setActiveButton("erase");
+      isErasing = true;
+      canvas.style.cursor = "url('{% static 'images/eraser-cursor.png' %}'), auto";
+   });
+
+   document.getElementById("brush-size").addEventListener("click", () => {
+      setActiveButton("brush-size");
+      const newSize = prompt("Enter brush size:", brushSize);
+      brushSize = newSize ? parseInt(newSize, 10) : brushSize;
+   });
+
+   document.getElementById("clear").addEventListener("click", () => {
+      document.getElementById('predicted-digit').classList.remove('opacity-100', 'translate-x-0');
+      document.getElementById('predicted-digit').classList.add('opacity-0', '-translate-x-10');
+
+
+      setActiveButton("draw");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Fill the canvas with white color
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      updatePredictionBars(Array(10).fill(0));
+      ctx.beginPath();
+      isErasing = false;
+      canvas.style.cursor = "crosshair";
+   });
+
+   // Event listener for the Predict button
+   document.getElementById("predict").addEventListener("click", () => {
+
+      // Convert the canvas content to a data URL
+      const imageData = canvas.toDataURL("image/png");
+
+      // Create a form data object to send the image
+      const formData = new FormData();
+      formData.append("image", imageData);
+
+      // Make an AJAX request to your server to send the image
+      fetch('{% url "predict" %}', {
+         method: 'POST',
+         body: formData,
+         headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+         }
+      })
+         .then(response => response.json())
+         .then(data => {
+            // Handle the server response (display prediction result, etc.)
+            updatePredictionBars(data.predictions);
+            showPredictedDigit(data.predictedDigit);
+         })
+         .catch(error => {
+            console.error('Error:', error);
+            alert("An error occurred while making the prediction.");
+         });
+   });
+
+
+   // Trigger the draw button on page load
+   document.getElementById("draw").click();
+
+   // Handle window resize
+   window.addEventListener('resize', resizeCanvas);
+
+</script>
+{% endblock %}

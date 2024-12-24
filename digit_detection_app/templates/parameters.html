@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="p-2 sm:ml-64">
+    <div class="p-2 mt-14">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <caption class="p-5 text-xl text-center font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                    Learning Parameters
+                </caption>
+
+                <tbody>
+                    <tr>
+                        <th colspan="2" class="px-6 py-3 text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            Learning Rate
+                        </th>
+                    </tr>
+
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white w-1/2">
+                            Learning Rate
+                        </th>
+                        <td class="px-6 py-4 w-1/2 font-bold">
+                            {{ learning_rate }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="2" class="px-6 py-3 text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            Error
+                        </th>
+                    </tr>
+
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white w-1/2">
+                            Error Threshold
+                        </th>
+                        <td class="px-6 py-4 w-1/2 font-bold">
+                            {{ error_threshold }}
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th colspan="2" class="px-6 py-3 text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            Input Features
+                        </th>
+                    </tr>
+
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white w-1/2">
+                            Number of Input Features
+                        </th>
+                        <td class="px-6 py-4 w-1/2 font-bold">
+                            {{ layers|first }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="2" class="px-6 py-3 text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            Output Features
+                        </th>
+                    </tr>
+
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white w-1/2">
+                            Number of Output Features
+                        </th>
+                        <td class="px-6 py-4 w-1/2 font-bold">
+                            {{ layers|last }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="2" class="px-6 py-3 text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            Layers
+                        </th>
+                    </tr>
+
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Number of Hidden Layers
+                        </th>
+                        <td class="px-6 py-4 font-bold">
+                            {{ layers|length|add:"-2" }}
+                        </td>
+                    </tr>
+                    {% for neurons in layers|slice:"1:-1" %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Neurons in Hidden Layer {{ forloop.counter }}
+                        </th>
+                        <td class="px-6 py-4 font-bold">
+                            {{ neurons }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                
+                </tbody>
+            </table>
+        </div>
+        
+        
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    function createNeuronInputs(num) {
+        const container = document.getElementById("neuronsContainer");
+        container.classList.remove("hidden");
+        container.innerHTML = ''; // Clear existing inputs
+
+        // Label for neuron inputs
+        const label = document.createElement("label");
+        label.className = "block text-blue-800 font-medium mb-2";
+        label.textContent = "Neurons in Each Hidden Layer";
+        container.appendChild(label);
+
+        for (let i = 0; i < num; i++) {
+            const newInput = document.createElement("input");
+            newInput.type = "number";
+            newInput.name = "neuronsPerLayer[]";
+            newInput.min = "1";
+            newInput.required = true;
+            newInput.placeholder = `Neurons in Hidden Layer ${i + 1}`;
+            newInput.className = "mt-2 block w-full border-2 border-blue-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3";
+            container.appendChild(newInput);
+        }
+    }
+</script>
+{% endblock %}

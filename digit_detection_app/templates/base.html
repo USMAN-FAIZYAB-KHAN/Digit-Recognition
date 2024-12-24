@@ -1,0 +1,129 @@
+{% load static %}
+<!doctype html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="https://kit.fontawesome.com/5783f5ea8c.js" crossorigin="anonymous"></script>
+   <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<style>
+   .active {
+      background-color: #1D4ED8 !important;
+      /* bg-blue-500 */
+      color: #ffffff !important;
+      /* text-white */
+      border-color: #2563eb !important;
+      /* border-blue-600 */
+   }
+</style>
+
+<body>
+
+
+   <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <div class="px-3 py-3 lg:px-5 lg:pl-3">
+         <div class="flex items-center justify-between">
+            <div class="flex items-center justify-start rtl:justify-end">
+               <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
+                  type="button"
+                  class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+                  <span class="sr-only">Open sidebar</span>
+                  <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                     <path clip-rule="evenodd" fill-rule="evenodd"
+                        d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                     </path>
+                  </svg>
+               </button>
+               <a href="https://flowbite.com" class="flex ms-2 md:me-24">
+                  <img src="https://flowbite.com/docs/images/logo.svg" class="h-8 me-3" alt="FlowBite Logo" />
+                  <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">DIGIT
+                     PREDICTOR</span>
+               </a>
+            </div>
+         </div>
+      </div>
+   </nav>
+
+   <aside id="logo-sidebar"
+      class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+      aria-label="Sidebar">
+      <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+         <ul class="space-y-2 font-medium">
+            <li>
+               <a href="{% url 'index' %}"
+                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 96 96"
+                     id="regression">
+                     <path stroke="#fff" stroke-linecap="round" stroke-width="5"
+                        d="M16 23V71C16 75.9706 20.0294 80 25 80H74M80 86L84.6325 81.6984C85.9107 80.5115 85.9107 78.4885 84.6325 77.3016L80 73M23 16L18.6984 11.3675C17.5115 10.0893 15.4885 10.0893 14.3016 11.3675L10 16M19 77L75 21">
+                     </path>
+                     <circle cx="31" cy="55" r="3" fill="#fff"></circle>
+                     <circle cx="59" cy="28" r="3" fill="#fff"></circle>
+                     <circle cx="61" cy="59" r="3" fill="#fff"></circle>
+                     <circle cx="75" cy="32" r="3" fill="#fff"></circle>
+                     <circle cx="56" cy="51" r="4" fill="#fff"></circle>
+                     <circle cx="47.5" cy="33.5" r="6.5" fill="#fff"></circle>
+                     <circle cx="70" cy="45" r="9" fill="#fff"></circle>
+                     <circle cx="39.5" cy="44.5" r="4.5" fill="#fff"></circle>
+                     <circle cx="49.5" cy="60.5" r="5.5" fill="#fff"></circle>
+                  </svg>
+                  <span class="ms-3">Predict</span>
+               </a>
+            </li>
+            <li>
+               <a href="{% url 'network' %}"
+                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" enable-background="new 0 0 100 100"
+                     viewBox="0 0 100 100" id="network-slicing" transform="rotate(-90)">
+                     <path fill="#fff" d="M82,72.5c-0.81,0-1.61,0.11-2.38,0.31l-6.48-14.83c2.69-1.73,4.37-4.72,4.37-7.99c0-5.24-4.26-9.5-9.5-9.5
+                c-1.13,0-2.24,0.21-3.28,0.6L55.9,25.43c2.25-1.79,3.6-4.52,3.6-7.43c0-5.24-4.26-9.5-9.5-9.5s-9.5,4.26-9.5,9.5
+                c0,2.92,1.36,5.64,3.6,7.43L35.28,41.1c-1.05-0.39-2.16-0.6-3.28-0.6c-5.24,0-9.5,4.26-9.5,9.5c0,3.26,1.68,6.25,4.37,7.99
+                l-6.48,14.83c-0.77-0.2-1.57-0.31-2.38-0.31c-5.24,0-9.5,4.26-9.5,9.5s4.26,9.5,9.5,9.5s9.5-4.26,9.5-9.5
+                c0-3.27-1.68-6.26-4.37-7.99l6.48-14.83c0.77,0.2,1.57,0.31,2.38,0.31c1.12,0,2.23-0.21,3.28-0.6l8.82,15.67
+                c-2.25,1.78-3.6,4.51-3.6,7.43c0,5.24,4.26,9.5,9.5,9.5s9.5-4.26,9.5-9.5c0-2.92-1.36-5.65-3.6-7.43l8.82-15.67
+                c1.05,0.38,2.16,0.6,3.28,0.6c0.81,0,1.61-0.11,2.38-0.31l6.48,14.83c-2.69,1.73-4.37,4.72-4.37,7.99c0,5.24,4.26,9.5,9.5,9.5
+                s9.5-4.26,9.5-9.5S87.24,72.5,82,72.5z M62.1,57.43l-8.82,15.67c-2.1-0.76-4.47-0.76-6.56,0L37.9,57.43c2.25-1.79,3.6-4.52,3.6-7.43
+                c0-2.92-1.36-5.65-3.6-7.43l8.82-15.67c1.05,0.38,2.16,0.6,3.28,0.6c1.12,0,2.23-0.21,3.28-0.6l8.82,15.67
+                c-2.25,1.78-3.6,4.51-3.6,7.43C58.5,52.92,59.86,55.64,62.1,57.43z M29.39,55.96c-2.37-1.04-3.89-3.38-3.89-5.96
+                c0-3.58,2.92-6.5,6.5-6.5c1.14,0,2.21,0.28,3.19,0.84c2.04,1.15,3.31,3.32,3.31,5.66c0,2.34-1.27,4.52-3.31,5.67
+                C33.42,56.66,31.24,56.77,29.39,55.96z M50,88.5c-3.58,0-6.5-2.92-6.5-6.5c0-2.34,1.27-4.51,3.32-5.67
+                c0.97-0.55,2.04-0.83,3.18-0.83s2.21,0.28,3.19,0.84c2.04,1.15,3.31,3.32,3.31,5.66C56.5,85.58,53.58,88.5,50,88.5z M64.82,55.67
+                c-2.05-1.16-3.32-3.33-3.32-5.67c0-2.34,1.27-4.51,3.32-5.67c0.97-0.55,2.04-0.83,3.18-0.83c3.58,0,6.5,2.92,6.5,6.5
+                c0,2.59-1.53,4.92-3.89,5.96C68.76,56.77,66.58,56.66,64.82,55.67z"></path>
+                  </svg>
+                  <span class="flex-1 ms-3 whitespace-nowrap">Neural Network</span>
+               </a>
+            </li>
+            <li>
+               <a href="{% url 'parameters' %}"
+                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" id="filter">
+                     <g>
+                       <path fill="#fff" d="M14 6.75H3a.75.75 0 010-1.5H14a.75.75 0 010 1.5zM21 6.75H18a.75.75 0 010-1.5h3a.75.75 0 010 1.5zM6 12.75H3a.75.75 0 010-1.5H6a.75.75 0 010 1.5zM21 12.75H10a.75.75 0 010-1.5H21a.75.75 0 010 1.5zM14 18.75H3a.75.75 0 010-1.5H14a.75.75 0 010 1.5zM21 18.75H18a.75.75 0 010-1.5h3a.75.75 0 010 1.5z"></path>
+                       <path fill="#fff" d="M8 14.75A2.75 2.75 0 1110.75 12 2.75 2.75 0 018 14.75zm0-4A1.25 1.25 0 109.25 12 1.25 1.25 0 008 10.75zM16 20.75A2.75 2.75 0 1118.75 18 2.75 2.75 0 0116 20.75zm0-4A1.25 1.25 0 1017.25 18 1.25 1.25 0 0016 16.75zM16 8.75A2.75 2.75 0 1118.75 6 2.75 2.75 0 0116 8.75zm0-4A1.25 1.25 0 1017.25 6 1.25 1.25 0 0016 4.75z"></path>
+                     </g>
+                   </svg>
+                  <span class="ms-3">Learning Parameters</span>
+               </a>
+            </li>
+            <li>
+               <a href="{% url 'graph' %}"
+                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" id="graph">
+                     <path d="M23 22a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 2 0v16.7l6.17-9.25a1 1 0 0 1 1.66 0l3.1 4.65 7.2-12.6a1 1 0 0 1 1.74 1l-8 14a1 1 0 0 1-.87.5 1 1 0 0 1-.86-.45L10 11.8 3.87 21H22a1 1 0 0 1 1 1Z" fill="white"></path>
+                  </svg>
+                  
+                  <span class="ms-3">Graph</span>
+               </a>
+            </li>
+         </ul>
+      </div>
+   </aside>
+    {% block content %} {% endblock %}
+    {% block script %} {% endblock %}
+  </body>
+  </html>
+

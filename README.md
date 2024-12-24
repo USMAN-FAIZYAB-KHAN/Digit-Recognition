@@ -1,6 +1,6 @@
 # 🖋️ **Digit Recognition System**
 
-Welcome to the **Digit Recognition System**, a Django-based web application designed to recognize handwritten digits. This application uses a custom-trained neural network model to accurately predict digits drawn by the user on an interactive canvas.
+Welcome to the Digit Recognition System, a Django-based web application crafted to recognize handwritten digits with precision and efficiency. This innovative application bridges the gap between machine learning and user interactivity, allowing seamless digit recognition through a custom neural network model integrated into an interactive web interface.
 
 ---
 
@@ -10,43 +10,35 @@ Welcome to the **Digit Recognition System**, a Django-based web application desi
 2. [Features](#-features)
 3. [Screenshots](#-screenshots)
 4. [Getting Started](#-getting-started)
-5. [Model Details](#-model-details)
-6. [Dependencies](#-dependencies)
-7. [Contributors](#-contributors)
+5. [Technical Details](#-technical-details)
+6. [Usage](#-usage)
+7. [Dependencies](#-dependencies)
+8. [Contributors](#-contributors)
 
 ---
 
 ## 📜 **Overview**
 
-The **Digit Recognition System** enables users to draw digits on an interactive canvas and receive real-time predictions powered by a custom-trained neural network. This project showcases an end-to-end pipeline, from training the model using the MNIST dataset to deploying the model in a web interface built with Django.
+The Digit Recognition System is designed to recognize and predict handwritten digits in real-time. Users can draw digits on an interactive canvas, which the system processes using a custom-trained neural network built from scratch. This project demonstrates the integration of model training, prediction, and deployment, providing a seamless user experience powered by the MNIST dataset and Django framework. It also showcases the potential of machine learning in interactive applications.
 
 ---
 
 ## ✨ **Features**
 
-### - **Custom Neural Network** 🧠
-  - Implemented and trained from scratch using **TensorFlow**.
+### **Custom Neural Network** 🧠
+  - Implemented and trained from scratch using backpropagation with gradient descent.
   - Built on the **MNIST** dataset, which consists of grayscale 28x28 images of handwritten digits.
-  - Offers high accuracy for recognizing handwritten digits.
 
-### - **Digit Drawing Canvas** 🖌️
+### **Digit Drawing Canvas** 🖌️
   - Interactive web interface allowing users to draw digits for immediate prediction.
-  - Uses HTML5 canvas for easy digit input and drawing.
   
-### - **End-to-End Deployment** 🌐
-  - Combines all steps, including data preprocessing, training, prediction, and web deployment, within a single system.
-  - Seamless integration of the trained model with the Django backend and front-end components.
-
-### - **Real-Time Predictions** 🚀
+### **Real-Time Predictions** 🚀
   - The system predicts drawn digits as soon as the user finishes drawing, providing instant feedback.
   - Uses the trained neural network for inference directly in the web application.
 
-### - **Neural Network Visualization** 🔍
-  - Visualize the internal workings of the neural network and its training progress.
-  - Display metrics such as accuracy and loss during training.
-  - Shows how the model's weights evolve over time, offering insight into the decision-making process of the neural network.
-  - Can be accessed through the web interface for an interactive learning experience.
-
+### **Neural Network Visualization** 🔍
+  - Visualize the neurons and their connections in the neural network.
+    
 ---
 
 ## 📸 **Screenshots**
@@ -109,6 +101,36 @@ http://127.0.0.1:8000
 
 ## 🗝 **Technical Details**
 
+The **Digit Recognition System** employs a custom neural network with the following components:
+
+### 1. Network Architecture
+- **Input Layer (784 neurons):** Processes 28x28 pixel images flattened into 784 values.
+- **Hidden Layer (250 neurons):** Extracts features using the sigmoid activation function.
+- **Output Layer (10 neurons):** Predicts digits 0–9.
+
+### 2. Core Algorithms
+- **Sigmoid Function:** Enables non-linearity and gradient calculation for backpropagation.
+- **Weight Initialization:** Randomized within [-0.5, 0.5] to prevent symmetry issues.
+- **Training:** Combines forward propagation, backpropagation, and gradient descent to minimize classification error. Stops when the average error per epoch drops below a certain threshold.
+
+### 3. Results
+Training results show a rapidly decreasing error, stabilizing as the model optimizes for accurate digit recognition.
+
+---
+
+## 🛠 **Usage**
+
+1. **Draw the Digit**:
+   - Use the interactive canvas on the application’s main page to draw any digit between 0–9.
+
+2. **Submit for Prediction**:
+   - Click the "Predict" button after completing your drawing.
+
+3. **View Results**:
+   - The system will process your input and display the predicted digit.
+
+4. **Clear and Retry**:
+   - Use the "Clear" button to erase the canvas and draw a new digit for prediction.
 
 ---
 
@@ -132,4 +154,5 @@ The project relies on the following dependencies:
 
 ---
 
-Enjoy exploring the **Digit Detection System**! Contributions and feedback are welcome. 😊
+Enjoy exploring the **Digit Recognition System**! Contributions and feedback are welcome. 😊
+

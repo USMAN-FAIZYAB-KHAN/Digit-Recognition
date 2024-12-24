@@ -43,14 +43,17 @@ The Digit Recognition System is designed to recognize and predict handwritten di
 
 ## 📸 **Screenshots**
 
-### - **Canvas Drawing**
-![Canvas Drawing](./Screenshots/drawing_canvas.png)
+![Main Screen](./Screenshots/main-screen.png)
 
-### - **Prediction Output**
-![Prediction Output](./Screenshots/prediction_result.png)
+![Recognition Output For Digit 2](./Screenshots/recognition.png)
 
-### - **Neural Network Visualization**
-![Neural Network Visualization](./Screenshots/nn_visualization.png)
+![Recognition Output For Digit 9](./Screenshots/recognition-2.png)
+
+![Neural Network Visualization](./Screenshots/neural-network.png)
+
+![Training Parameters](./Screenshots/training-parameters.png)
+
+![Error Graph](./Screenshots/error-graph.png)
 
 ---
 
@@ -114,7 +117,7 @@ The **Digit Recognition System** employs a custom neural network with the follow
 - **Training:** Combines forward propagation, backpropagation, and gradient descent to minimize classification error. Stops when the average error per epoch drops below a certain threshold.
 
 ### 3. Results
-Training results show a rapidly decreasing error, stabilizing as the model optimizes for accurate digit recognition.
+- Training results show a rapidly decreasing error, stabilizing as the model optimizes for accurate digit recognition.
 
 ---
 

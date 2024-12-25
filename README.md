@@ -1,4 +1,4 @@
-# 🖋️ **Digit Recognition System**
+![Digit Recognition System](./Screenshots/banner.png)
 
 Welcome to the Digit Recognition System, a Django-based web application crafted to recognize handwritten digits with precision and efficiency. This innovative application bridges the gap between machine learning and user interactivity, allowing seamless digit recognition through a custom neural network model integrated into an interactive web interface.
 
